@@ -45,6 +45,7 @@ const Index = () => {
         title: 'Task added',
         description: 'Your new task has been created.',
       });
+      fetchTasks()
     } catch (error) {
       console.error('Error adding task:', error);
       // Demo mode: add locally
