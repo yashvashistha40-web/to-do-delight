@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Configure your API base URL here
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const API_BASE_URL = 'https://ig0d3yncqe.execute-api.ap-south-1.amazonaws.com/Stage'
 
 const api = axios.create({
   baseURL: API_BASE_URL,
