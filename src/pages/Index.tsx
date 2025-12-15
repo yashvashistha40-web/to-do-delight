@@ -82,28 +82,50 @@ const Index = () => {
       setLoadingTaskId(null);
     }
   };
+const handleDeleteTask = async (id: string) => {
+  try {
+    setLoadingTaskId(id);
+    await taskApi.deleteTask(id);
+    toast({
+      title: 'Task deleted',
+      description: 'The task has been removed.',
+    });
 
-  const handleDeleteTask = async (id: string) => {
-    try {
-      setLoadingTaskId(id);
-      await taskApi.deleteTask(id);
-      setTasks((prev) => prev.filter((task) => task.id !== id));
-      toast({
-        title: 'Task deleted',
-        description: 'The task has been removed.',
-      });
-    } catch (error) {
-      console.error('Error deleting task:', error);
-      // Demo mode: delete locally
-      setTasks((prev) => prev.filter((task) => task.id !== id));
-      toast({
-        title: 'Task deleted (demo)',
-        description: 'Running in demo mode.',
-      });
-    } finally {
-      setLoadingTaskId(null);
-    }
-  };
+    // ✅ Re-fetch the updated list
+    await fetchTasks();
+  } catch (error) {
+    console.error('Error deleting task:', error);
+    toast({
+      title: 'Error deleting task',
+      description: 'Could not delete the task. Please try again.',
+      variant: 'destructive',
+    });
+  } finally {
+    setLoadingTaskId(null);
+  }
+};
+
+  // const handleDeleteTask = async (id: string) => {
+  //   try {
+  //     setLoadingTaskId(id);
+  //     await taskApi.deleteTask(id);
+  //     setTasks((prev) => prev.filter((task) => task.id !== id));
+  //     toast({
+  //       title: 'Task deleted',
+  //       description: 'The task has been removed.',
+  //     });
+  //   } catch (error) {
+  //     console.error('Error deleting task:', error);
+  //     // Demo mode: delete locally
+  //     setTasks((prev) => prev.filter((task) => task.id !== id));
+  //     toast({
+  //       title: 'Task deleted (demo)',
+  //       description: 'Running in demo mode.',
+  //     });
+  //   } finally {
+  //     setLoadingTaskId(null);
+  //   }
+  // };
 
   const completedCount = tasks.filter((t) => t.completed).length;
   const totalCount = tasks.length;
