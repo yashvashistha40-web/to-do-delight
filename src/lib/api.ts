@@ -29,15 +29,35 @@ export interface UpdateTaskPayload {
 export const taskApi = {
   // Get all tasks
   getTasks: async (): Promise<Task[]> => {
-    const response = await api.get('/tasks');
-    return response.data;
-  },
+  const response = await api.get('/tasks');
+  // Normalize backend fields to frontend shape
+  return response.data.map((item: any) => ({
+    id: item.taskId,
+    title: item.title,
+    completed: item.completed,
+    createdAt: item.createdAt,
+  }));
+},
+
+  // getTasks: async (): Promise<Task[]> => {
+  //   const response = await api.get('/tasks');
+  //   return response.data;
+  // },
 
   // Create a new task
   createTask: async (payload: CreateTaskPayload): Promise<Task> => {
-    const response = await api.post('/tasks', payload);
-    return response.data;
-  },
+  const response = await api.post('/tasks', payload);
+  return {
+    id: response.data.taskId,
+    title: payload.title,
+    completed: false,
+  };
+},
+
+  // createTask: async (payload: CreateTaskPayload): Promise<Task> => {
+  //   const response = await api.post('/tasks', payload);
+  //   return response.data;
+  // },
 
   // Update a task
   updateTask: async (id: string, payload: UpdateTaskPayload): Promise<Task> => {
